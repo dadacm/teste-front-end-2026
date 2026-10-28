@@ -5,19 +5,28 @@ const RemoteDrawer = lazy(
   () => import("mf_drawer/DrawerApp")
 );
 
+const RemoteVideosPage = lazy(
+  () => import("mf_videos/VideosPage")
+);
+
 export default function App() {
   return (
     <div>
-      <h1>iCasei Front-End Challenge</h1>
+      <header>
+        <h1>iCasei Front-End Challenge</h1>
+      </header>
 
-      <Suspense fallback={<p>Carregando menu...</p>}>
-        <RemoteDrawer />
-      </Suspense>
+      <div style={{ display: "flex", gap: "24px" }}>
+        <Suspense fallback={<p>Carregando menu...</p>}>
+          <RemoteDrawer />
+        </Suspense>
 
-      <main>
-        <h2>Aplicação principal</h2>
-        <p>Conteúdo do Shell</p>
-      </main>
+        <main>
+          <Suspense fallback={<p>Carregando vídeos...</p>}>
+            <RemoteVideosPage />
+          </Suspense>
+        </main>
+      </div>
     </div>
   );
 }

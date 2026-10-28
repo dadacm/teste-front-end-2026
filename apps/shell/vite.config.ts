@@ -14,6 +14,11 @@ export default defineConfig({
           name: "mf_drawer",
           entry: "http://localhost:5174/remoteEntry.js",
         },
+        mf_videos: {
+          type: "module",
+          name: "mf_videos",
+          entry: "http://localhost:5175/remoteEntry.js",
+        },
       },
       shared: {
         react: { singleton: true },
