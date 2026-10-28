@@ -1,32 +1,55 @@
 
 import { lazy, Suspense } from "react";
+import {
+  Navigate,
+  Route,
+  Routes,
+} from "react-router";
 
-const RemoteDrawer = lazy(
-  () => import("mf_drawer/DrawerApp")
-);
+import { AppLayout } from "./apps/AppLayout";
 
-const RemoteVideosPage = lazy(
+const VideosPage = lazy(
   () => import("mf_videos/VideosPage")
 );
 
+const FavoritesPage = lazy(
+  () => import("mf_videos/FavoritesPage")
+);
+
+function LoginPage() {
+  return <h2>Login em desenvolvimento</h2>;
+}
+
 export default function App() {
   return (
-    <div>
-      <header>
-        <h1>iCasei Front-End Challenge</h1>
-      </header>
+    <Suspense fallback={<p>Carregando página...</p>}>
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/videos" replace />}
+        />
 
-      <div style={{ display: "flex", gap: "24px" }}>
-        <Suspense fallback={<p>Carregando menu...</p>}>
-          <RemoteDrawer />
-        </Suspense>
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
 
-        <main>
-          <Suspense fallback={<p>Carregando vídeos...</p>}>
-            <RemoteVideosPage />
-          </Suspense>
-        </main>
-      </div>
-    </div>
+        <Route element={<AppLayout />}>
+          <Route
+            path="/videos"
+            element={<VideosPage />}
+          />
+          <Route
+            path="/favorites"
+            element={<FavoritesPage />}
+          />
+        </Route>
+
+        <Route
+          path="*"
+          element={<h2>Página não encontrada</h2>}
+        />
+      </Routes>
+    </Suspense>
   );
 }
