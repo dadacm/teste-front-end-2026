@@ -2,6 +2,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { federation } from "@module-federation/vite";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig({
   plugins: [
@@ -16,6 +17,14 @@ export default defineConfig({
       shared: {
         react: { singleton: true },
         "react-dom": { singleton: true },
+      },
+      dts: {
+        generateTypes: {
+          tsConfigPath: fileURLToPath(
+            new URL("./tsconfig.federation.json", import.meta.url)
+          ),
+          abortOnError: true,
+        },
       },
     }),
   ],

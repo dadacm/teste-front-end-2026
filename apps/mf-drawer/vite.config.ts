@@ -16,6 +16,11 @@ export default defineConfig({
         react: { singleton: true },
         "react-dom": { singleton: true },
       },
+      dts: {
+        generateTypes: {
+          abortOnError: true,
+        },
+      },
     }),
   ],
   server: {

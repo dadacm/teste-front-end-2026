@@ -7,6 +7,7 @@ import {
 } from "react-router";
 
 import type { NavigationPath } from "@icasei/contracts";
+import { MicroFrontendErrorBoundary } from "../components/MicroFrontendErrorBoundary";
 
 const RemoteDrawer = lazy(
   () => import("mf_drawer/DrawerApp")
@@ -23,13 +24,16 @@ export function AppLayout() {
 
   return (
     <div className="app-layout">
+      <MicroFrontendErrorBoundary remoteName="Menu lateral">
+
       <Suspense fallback={<p>Carregando menu...</p>}>
         <RemoteDrawer
           currentPath={currentPath}
           favoritesCount={0}
           onNavigate={(path: NavigationPath) => navigate(path)}
-        />
+          />
       </Suspense>
+          </MicroFrontendErrorBoundary>
 
       <main>
         <Outlet />
