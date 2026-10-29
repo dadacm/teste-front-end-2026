@@ -7,7 +7,7 @@ import {
 } from "react-router";
 
 import { AppLayout } from "./apps/AppLayout";
-import { MicroFrontendErrorBoundary } from "./components/MicroFrontendErrorBoundary";
+import { MicroFrontendErrorBoundary } from "./components/MicroFrontendErrorBoundary/MicroFrontendErrorBoundary";
 
 const VideosPage = lazy(
   () => import("mf_videos/VideosPage")

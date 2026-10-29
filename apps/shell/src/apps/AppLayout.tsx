@@ -7,7 +7,7 @@ import {
 } from "react-router";
 
 import type { NavigationPath } from "@icasei/contracts";
-import { MicroFrontendErrorBoundary } from "../components/MicroFrontendErrorBoundary";
+import { MicroFrontendErrorBoundary } from "../components/MicroFrontendErrorBoundary/MicroFrontendErrorBoundary";
 
 const RemoteDrawer = lazy(
   () => import("mf_drawer/DrawerApp")
