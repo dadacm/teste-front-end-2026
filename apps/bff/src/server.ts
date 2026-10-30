@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { createApp } from "./app.js";
 import { openDatabase } from "./database/connection.js";
 import { runMigrations } from "./database/migrate.js";
