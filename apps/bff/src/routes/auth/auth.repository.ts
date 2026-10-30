@@ -1,29 +1,67 @@
 
 import type { DatabaseSync } from "node:sqlite";
 
-interface CreateUserData {
+interface UserRecord {
   id: string;
   email: string;
   passwordHash: string;
 }
+interface CreateSessionData {
+    tokenHash: string;
+    userId: string;
+    expiresAt: number;
+  }
 
 export function findUserByEmail(
   database: DatabaseSync,
   email: string
-): { id: string } | undefined {
+): UserRecord | undefined {
   return database
-    .prepare("SELECT id FROM users WHERE email = ?")
-    .get(email) as { id: string } | undefined;
+    .prepare(`
+      SELECT
+        id,
+        email,
+        password_hash AS passwordHash
+      FROM users
+      WHERE email = ?
+    `)
+    .get(email) as UserRecord | undefined;
 }
 
 export function insertUser(
   database: DatabaseSync,
-  { id, email, passwordHash }: CreateUserData
+  user: UserRecord
 ): void {
   database
     .prepare(`
-      INSERT INTO users (id, email, password_hash)
+      INSERT INTO users (
+        id,
+        email,
+        password_hash
+      )
       VALUES (?, ?, ?)
     `)
-    .run(id, email, passwordHash);
+    .run(
+      user.id,
+      user.email,
+      user.passwordHash
+    );
 }
+
+
+
+export function insertSession(
+    database: DatabaseSync,
+    { tokenHash, userId, expiresAt }: CreateSessionData
+  ): void {
+    database
+      .prepare(`
+        INSERT INTO sessions (
+          token_hash,
+          user_id,
+          expires_at
+        )
+        VALUES (?, ?, ?)
+      `)
+      .run(tokenHash, userId, expiresAt);
+  }
