@@ -1,4 +1,3 @@
-
 import request from "supertest";
 import { describe, expect, it } from "vitest";
 
@@ -13,9 +12,7 @@ describe("GET /api/health", () => {
     try {
       runMigrations(database);
 
-      const response = await request(
-        createApp(database)
-      ).get("/api/health");
+      const response = await request(createApp(database)).get("/api/health");
 
       expect(response.status).toBe(200);
 

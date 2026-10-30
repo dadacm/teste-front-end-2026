@@ -13,17 +13,17 @@ Desenvolver uma aplicação HTML5.
 Criar duas aplicações de microfrontend (no wireframe, MF_DRAWER e MF_VIDEOS).
 A aplicação MF_DRAWER deve ter dois links, VÍDEOS e FAVORITOS, e a aplicação MF_VIDEOS deve conter a busca e as listagens.
 
-  - AUTENTICAÇÃO:
-    - A aplicação deve conter uma tela de login para que o usuário possa se autenticar e iniciar uma sessão.
-  - VÍDEOS:
-    - Ao acessar, o usuário deve poder buscar vídeos por meio de um campo de busca, no qual deverá informar os termos que serão utilizados para pesquisar vídeos na API do YouTube e listá-los conforme o wireframe.
-    - O usuário pode reproduzir o vídeo e marcá-lo como favorito.
-    - Ao clicar no botão de estrela, deve adicionar ou remover o vídeo da lista de favoritos e atualizar o contador total de vídeos favoritos.
-  - FAVORITOS:
-    - Ao clicar em FAVORITOS, deve exibir a lista de vídeos marcados como favoritos.
-    - Os favoritos devem permanecer disponíveis após a atualização da página. A estratégia de persistência fica a critério do candidato.
-  - ROTAS:
-    - As páginas de vídeos e favoritos devem permitir acesso direto por suas respectivas rotas.
+- AUTENTICAÇÃO:
+  - A aplicação deve conter uma tela de login para que o usuário possa se autenticar e iniciar uma sessão.
+- VÍDEOS:
+  - Ao acessar, o usuário deve poder buscar vídeos por meio de um campo de busca, no qual deverá informar os termos que serão utilizados para pesquisar vídeos na API do YouTube e listá-los conforme o wireframe.
+  - O usuário pode reproduzir o vídeo e marcá-lo como favorito.
+  - Ao clicar no botão de estrela, deve adicionar ou remover o vídeo da lista de favoritos e atualizar o contador total de vídeos favoritos.
+- FAVORITOS:
+  - Ao clicar em FAVORITOS, deve exibir a lista de vídeos marcados como favoritos.
+  - Os favoritos devem permanecer disponíveis após a atualização da página. A estratégia de persistência fica a critério do candidato.
+- ROTAS:
+  - As páginas de vídeos e favoritos devem permitir acesso direto por suas respectivas rotas.
 
 ### Wireframes de referência
 

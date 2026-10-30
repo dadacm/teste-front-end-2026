@@ -1,11 +1,7 @@
-
 import type { DatabaseSync } from "node:sqlite";
 import { Router } from "express";
 
-import {
-  loginSchema,
-  registerSchema,
-} from "./auth.schemas.js";
+import { loginSchema, registerSchema } from "./auth.schemas.js";
 
 import {
   EmailAlreadyRegisteredError,
@@ -21,9 +17,7 @@ export function createAuthRouter(database: DatabaseSync) {
   const router = Router();
 
   router.post("/register", async (request, response) => {
-    const validation = registerSchema.safeParse(
-      request.body
-    );
+    const validation = registerSchema.safeParse(request.body);
 
     if (!validation.success) {
       response.status(400).json({
@@ -33,10 +27,7 @@ export function createAuthRouter(database: DatabaseSync) {
     }
 
     try {
-      const user = await registerUser(
-        database,
-        validation.data
-      );
+      const user = await registerUser(database, validation.data);
 
       response.status(201).json({ user });
     } catch (error) {
@@ -52,9 +43,7 @@ export function createAuthRouter(database: DatabaseSync) {
   });
 
   router.post("/login", async (request, response) => {
-    const validation = loginSchema.safeParse(
-      request.body
-    );
+    const validation = loginSchema.safeParse(request.body);
 
     if (!validation.success) {
       response.status(400).json({
@@ -64,10 +53,7 @@ export function createAuthRouter(database: DatabaseSync) {
     }
 
     try {
-      const { user, sessionToken } = await loginUser(
-        database,
-        validation.data
-      );
+      const { user, sessionToken } = await loginUser(database, validation.data);
 
       response.cookie("icasei_session", sessionToken, {
         httpOnly: true,
@@ -95,8 +81,7 @@ export function createAuthRouter(database: DatabaseSync) {
   router.get("/me", (request, response) => {
     response.setHeader("Cache-Control", "no-store");
 
-    const sessionToken =
-      request.cookies?.icasei_session;
+    const sessionToken = request.cookies?.icasei_session;
 
     if (typeof sessionToken !== "string") {
       response.status(401).json({
@@ -105,10 +90,7 @@ export function createAuthRouter(database: DatabaseSync) {
       return;
     }
 
-    const user = getAuthenticatedUser(
-      database,
-      sessionToken
-    );
+    const user = getAuthenticatedUser(database, sessionToken);
 
     if (!user) {
       response.status(401).json({
@@ -120,10 +102,8 @@ export function createAuthRouter(database: DatabaseSync) {
     response.status(200).json({ user });
   });
 
-
-router.post("/logout", (request, response) => {
-    const sessionToken =
-      request.cookies?.icasei_session;
+  router.post("/logout", (request, response) => {
+    const sessionToken = request.cookies?.icasei_session;
 
     if (typeof sessionToken === "string") {
       logoutUser(database, sessionToken);
@@ -140,7 +120,6 @@ router.post("/logout", (request, response) => {
 
     response.sendStatus(204);
   });
-
 
   return router;
 }

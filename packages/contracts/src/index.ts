@@ -1,5 +1,1 @@
-
-export type {
-    NavigationPath,
-    DrawerProps,
-  } from "./navigation";
+export type { NavigationPath, DrawerProps } from "./navigation";

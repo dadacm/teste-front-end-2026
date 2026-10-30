@@ -1,11 +1,12 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { federation } from "@module-federation/vite";
 import { fileURLToPath } from "node:url";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     react(),
     federation({
       name: "mf_videos",
@@ -20,9 +21,7 @@ export default defineConfig({
       },
       dts: {
         generateTypes: {
-          tsConfigPath: fileURLToPath(
-            new URL("./tsconfig.federation.json", import.meta.url)
-          ),
+          tsConfigPath: fileURLToPath(new URL("./tsconfig.federation.json", import.meta.url)),
           abortOnError: true,
         },
       },

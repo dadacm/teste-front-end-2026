@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "prettier": "^3.9.10",
+    "prettier-plugin-tailwindcss": "^0.8.1"
+  },
+  "name": "icasei-frontend-challenge",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.34.9",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  }
+}

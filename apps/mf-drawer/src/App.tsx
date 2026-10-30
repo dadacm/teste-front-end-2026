@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 import type { NavigationPath } from "@icasei/contracts";
@@ -6,14 +5,7 @@ import type { NavigationPath } from "@icasei/contracts";
 import DrawerApp from "./DrawerApp";
 
 export default function App() {
-  const [currentPath, setCurrentPath] =
-    useState<NavigationPath>("/videos");
+  const [currentPath, setCurrentPath] = useState<NavigationPath>("/videos");
 
-  return (
-    <DrawerApp
-      currentPath={currentPath}
-      favoritesCount={3}
-      onNavigate={setCurrentPath}
-    />
-  );
+  return <DrawerApp currentPath={currentPath} favoritesCount={3} onNavigate={setCurrentPath} />;
 }

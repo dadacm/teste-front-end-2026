@@ -1,4 +1,3 @@
-
 import { mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
@@ -6,8 +5,7 @@ import { DatabaseSync } from "node:sqlite";
 export function openDatabase(
   path = process.env.DATABASE_PATH ?? "./data/icasei.sqlite",
 ): DatabaseSync {
-  const databasePath =
-    path === ":memory:" ? path : resolve(path);
+  const databasePath = path === ":memory:" ? path : resolve(path);
 
   if (databasePath !== ":memory:") {
     mkdirSync(dirname(databasePath), { recursive: true });

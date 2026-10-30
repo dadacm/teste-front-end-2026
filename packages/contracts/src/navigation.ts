@@ -1,7 +1,4 @@
-
-export type NavigationPath =
-  | "/videos"
-  | "/favorites";
+export type NavigationPath = "/videos" | "/favorites";
 
 export interface DrawerProps {
   currentPath: NavigationPath;

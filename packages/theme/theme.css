@@ -1,0 +1,16 @@
+@theme {
+  --color-brand: #94caf3;
+  --color-brand-hover: #b9e0fa;
+
+  --color-background: #0b1726;
+  --color-sidebar: #122337;
+  --color-surface: #1b3045;
+  --color-surface-hover: #24445c;
+  --color-border-ui: #344d62;
+
+  --color-text-primary: #f8fbff;
+  --color-text-secondary: #a6bdce;
+  --color-text-muted: #8da8bc;
+
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+}

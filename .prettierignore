@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+**/build
+**/coverage
+**/*.tsbuildinfo
+
+apps/bff/data
+pnpm-lock.yaml
+
+.env
+.env.*

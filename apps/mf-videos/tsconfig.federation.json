@@ -1,13 +1,11 @@
-
 {
-    "extends": "./tsconfig.app.json",
-    "compilerOptions": {
-      "noEmit": false,
-      "declaration": true,
-      "emitDeclarationOnly": true,
-      "incremental": false,
-      "tsBuildInfoFile": null,
-      "outDir": "./node_modules/.cache/federation-types"
-    }
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "incremental": false,
+    "tsBuildInfoFile": null,
+    "outDir": "./node_modules/.cache/federation-types"
   }
-  
+}

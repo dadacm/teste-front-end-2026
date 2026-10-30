@@ -1,4 +1,3 @@
-
 import { randomUUID } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
 import * as argon2 from "argon2";
@@ -10,7 +9,7 @@ import {
   insertSession,
   insertUser,
   deleteSession,
-  findUserByActiveSession
+  findUserByActiveSession,
 } from "./auth.repository.js";
 
 export class EmailAlreadyRegisteredError extends Error {
@@ -20,10 +19,7 @@ export class EmailAlreadyRegisteredError extends Error {
   }
 }
 
-export async function registerUser(
-  database: DatabaseSync,
-  { email, password }: RegisterInput
-) {
+export async function registerUser(database: DatabaseSync, { email, password }: RegisterInput) {
   const existingUser = findUserByEmail(database, email);
 
   if (existingUser) {
@@ -55,10 +51,7 @@ export async function registerUser(
   return user;
 }
 
-
-
-export const SESSION_DURATION_MS =
-  7 * 24 * 60 * 60 * 1000;
+export const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 
 export class InvalidCredentialsError extends Error {
   constructor() {
@@ -67,20 +60,14 @@ export class InvalidCredentialsError extends Error {
   }
 }
 
-export async function loginUser(
-  database: DatabaseSync,
-  { email, password }: LoginInput
-) {
+export async function loginUser(database: DatabaseSync, { email, password }: LoginInput) {
   const user = findUserByEmail(database, email);
 
   if (!user) {
     throw new InvalidCredentialsError();
   }
 
-  const passwordMatches = await argon2.verify(
-    user.passwordHash,
-    password
-  );
+  const passwordMatches = await argon2.verify(user.passwordHash, password);
 
   if (!passwordMatches) {
     throw new InvalidCredentialsError();
@@ -105,41 +92,26 @@ export async function loginUser(
   };
 }
 
-
 function hashSessionToken(token: string): string {
-    return createHash("sha256")
-      .update(token)
-      .digest("hex");
+  return createHash("sha256").update(token).digest("hex");
+}
+
+export function getAuthenticatedUser(database: DatabaseSync, sessionToken: string) {
+  if (!/^[a-f0-9]{64}$/.test(sessionToken)) {
+    return null;
   }
 
-  export function getAuthenticatedUser(
-    database: DatabaseSync,
-    sessionToken: string
-  ) {
-    if (!/^[a-f0-9]{64}$/.test(sessionToken)) {
-      return null;
-    }
+  const tokenHash = hashSessionToken(sessionToken);
 
-    const tokenHash = hashSessionToken(sessionToken);
+  return findUserByActiveSession(database, tokenHash, Date.now()) ?? null;
+}
 
-    return (
-      findUserByActiveSession(
-        database,
-        tokenHash,
-        Date.now()
-      ) ?? null
-    );
+export function logoutUser(database: DatabaseSync, sessionToken: string): void {
+  if (!/^[a-f0-9]{64}$/.test(sessionToken)) {
+    return;
   }
 
-  export function logoutUser(
-    database: DatabaseSync,
-    sessionToken: string
-  ): void {
-    if (!/^[a-f0-9]{64}$/.test(sessionToken)) {
-      return;
-    }
+  const tokenHash = hashSessionToken(sessionToken);
 
-    const tokenHash = hashSessionToken(sessionToken);
-
-    deleteSession(database, tokenHash);
-  }
+  deleteSession(database, tokenHash);
+}
