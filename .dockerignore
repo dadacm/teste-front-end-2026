@@ -1,0 +1,27 @@
++
+# Git
+.git
+
+# Dependencies
+**/node_modules
+
+# Build outputs
+**/dist
+**/build
+**/coverage
+**/*.tsbuildinfo
+
+# SQLite local
+apps/bff/data
+
+# Environment variables
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs
+**/*.log
+
+# Editors
+.vscode
+.idea

@@ -1,0 +1,38 @@
+
+# Etapa 1: compilar o BFF
+FROM node:24-bookworm AS build
+
+WORKDIR /workspace
+
+RUN npm install -g pnpm@10.34.9
+
+COPY . .
+
+RUN pnpm install --frozen-lockfile
+
+RUN pnpm --filter @icasei/bff build
+
+RUN pnpm --filter @icasei/bff deploy \
+    /out/bff --prod --legacy
+
+
+# Etapa 2: executar a aplicação
+FROM node:24-bookworm-slim AS runtime
+
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV DATABASE_PATH=/app/data/icasei.sqlite
+
+WORKDIR /app
+
+COPY --from=build /out/bff ./
+COPY --from=build /workspace/apps/bff/dist ./dist
+
+RUN mkdir -p /app/data \
+    && chown node:node /app/data
+
+USER node
+
+EXPOSE 3000
+
+CMD ["node", "dist/server.js"]
