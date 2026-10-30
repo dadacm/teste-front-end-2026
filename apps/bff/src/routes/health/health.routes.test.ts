@@ -2,17 +2,29 @@
 import request from "supertest";
 import { describe, expect, it } from "vitest";
 
-import { app } from "../../app.js";
+import { createApp } from "../../app.js";
+import { openDatabase } from "../../database/connection.js";
+import { runMigrations } from "../../database/migrate.js";
 
 describe("GET /api/health", () => {
   it("deve retornar o status de saúde do BFF", async () => {
-    const response = await request(app).get("/api/health");
+    const database = openDatabase(":memory:");
 
-    expect(response.status).toBe(200);
+    try {
+      runMigrations(database);
 
-    expect(response.body).toEqual({
-      status: "ok",
-      service: "bff",
-    });
+      const response = await request(
+        createApp(database)
+      ).get("/api/health");
+
+      expect(response.status).toBe(200);
+
+      expect(response.body).toEqual({
+        status: "ok",
+        service: "bff",
+      });
+    } finally {
+      database.close();
+    }
   });
 });

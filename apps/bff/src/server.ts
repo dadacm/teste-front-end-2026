@@ -1,6 +1,7 @@
 
-import { app } from "./app.js";
 
+
+import { createApp } from "./app.js";
 import { openDatabase } from "./database/connection.js";
 import { runMigrations } from "./database/migrate.js";
 
@@ -14,6 +15,8 @@ try {
   database.close();
   throw error;
 }
+
+const app = createApp(database);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`BFF executando na porta ${PORT}`);
