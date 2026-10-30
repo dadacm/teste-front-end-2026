@@ -9,8 +9,10 @@ import {
 
 import {
   EmailAlreadyRegisteredError,
+  getAuthenticatedUser,
   InvalidCredentialsError,
   loginUser,
+  logoutUser,
   registerUser,
   SESSION_DURATION_MS,
 } from "./auth.service.js";
@@ -89,6 +91,56 @@ export function createAuthRouter(database: DatabaseSync) {
       throw error;
     }
   });
+
+  router.get("/me", (request, response) => {
+    response.setHeader("Cache-Control", "no-store");
+
+    const sessionToken =
+      request.cookies?.icasei_session;
+
+    if (typeof sessionToken !== "string") {
+      response.status(401).json({
+        error: "Usuário não autenticado.",
+      });
+      return;
+    }
+
+    const user = getAuthenticatedUser(
+      database,
+      sessionToken
+    );
+
+    if (!user) {
+      response.status(401).json({
+        error: "Sessão inválida ou expirada.",
+      });
+      return;
+    }
+
+    response.status(200).json({ user });
+  });
+
+
+router.post("/logout", (request, response) => {
+    const sessionToken =
+      request.cookies?.icasei_session;
+
+    if (typeof sessionToken === "string") {
+      logoutUser(database, sessionToken);
+    }
+
+    response.clearCookie("icasei_session", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
+
+    response.setHeader("Cache-Control", "no-store");
+
+    response.sendStatus(204);
+  });
+
 
   return router;
 }

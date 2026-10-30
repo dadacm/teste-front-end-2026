@@ -12,6 +12,11 @@ interface CreateSessionData {
     expiresAt: number;
   }
 
+  interface AuthenticatedUser {
+    id: string;
+    email: string;
+  }
+
 export function findUserByEmail(
   database: DatabaseSync,
   email: string
@@ -48,8 +53,6 @@ export function insertUser(
     );
 }
 
-
-
 export function insertSession(
     database: DatabaseSync,
     { tokenHash, userId, expiresAt }: CreateSessionData
@@ -64,4 +67,37 @@ export function insertSession(
         VALUES (?, ?, ?)
       `)
       .run(tokenHash, userId, expiresAt);
+  }
+
+
+  export function findUserByActiveSession(
+    database: DatabaseSync,
+    tokenHash: string,
+    now: number
+  ): AuthenticatedUser | undefined {
+    return database
+      .prepare(`
+        SELECT
+          users.id,
+          users.email
+        FROM sessions
+        INNER JOIN users
+          ON users.id = sessions.user_id
+        WHERE sessions.token_hash = ?
+          AND sessions.expires_at > ?
+        LIMIT 1
+      `)
+      .get(tokenHash, now) as AuthenticatedUser | undefined;
+  }
+
+  export function deleteSession(
+    database: DatabaseSync,
+    tokenHash: string
+  ): void {
+    database
+      .prepare(`
+        DELETE FROM sessions
+        WHERE token_hash = ?
+      `)
+      .run(tokenHash);
   }

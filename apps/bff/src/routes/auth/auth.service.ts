@@ -9,6 +9,8 @@ import {
   findUserByEmail,
   insertSession,
   insertUser,
+  deleteSession,
+  findUserByActiveSession
 } from "./auth.repository.js";
 
 export class EmailAlreadyRegisteredError extends Error {
@@ -86,9 +88,7 @@ export async function loginUser(
 
   const sessionToken = randomBytes(32).toString("hex");
 
-  const tokenHash = createHash("sha256")
-    .update(sessionToken)
-    .digest("hex");
+  const tokenHash = hashSessionToken(sessionToken);
 
   insertSession(database, {
     tokenHash,
@@ -104,3 +104,42 @@ export async function loginUser(
     sessionToken,
   };
 }
+
+
+function hashSessionToken(token: string): string {
+    return createHash("sha256")
+      .update(token)
+      .digest("hex");
+  }
+
+  export function getAuthenticatedUser(
+    database: DatabaseSync,
+    sessionToken: string
+  ) {
+    if (!/^[a-f0-9]{64}$/.test(sessionToken)) {
+      return null;
+    }
+
+    const tokenHash = hashSessionToken(sessionToken);
+
+    return (
+      findUserByActiveSession(
+        database,
+        tokenHash,
+        Date.now()
+      ) ?? null
+    );
+  }
+
+  export function logoutUser(
+    database: DatabaseSync,
+    sessionToken: string
+  ): void {
+    if (!/^[a-f0-9]{64}$/.test(sessionToken)) {
+      return;
+    }
+
+    const tokenHash = hashSessionToken(sessionToken);
+
+    deleteSession(database, tokenHash);
+  }
