@@ -19,6 +19,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@icasei/contracts": "workspace:*",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",
     "@types/node": "^24.19.2",
