@@ -50,14 +50,14 @@ export function SearchInput({ onSearch, isLoading = false }: SearchInputProps) {
 
       <Button
         type="submit"
+        icon={<Search size={18} aria-hidden="true" />}
         isLoading={isLoading}
+        loadingText="Buscando..."
         disabled={!query.trim()}
         className="bg-brand text-background hover:bg-brand-hover"
       >
-        {isLoading ? "Buscando..." : "Buscar"}
+        Buscar
       </Button>
-      <Search size={18} aria-hidden="true" />
-      {isLoading ? "Buscando..." : "Buscar"}
     </form>
   );
 }
