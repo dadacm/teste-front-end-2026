@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+  envDir: fileURLToPath(new URL("../../", import.meta.url)),
   plugins: [
     tailwindcss(),
     react(),
