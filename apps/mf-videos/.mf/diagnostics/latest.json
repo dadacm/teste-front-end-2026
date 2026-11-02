@@ -1,10 +1,10 @@
 {
   "latestErrorEvent": {
     "code": "TYPE-001",
-    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"/home/dcm/.nvm/versions/node/v24.22.1/bin/node \\\"/home/dcm/Área de Trabalho/teste-front-end-2026/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/bin/tsc\\\" --project \\\"/home/dcm/Área de Trabalho/teste-front-end-2026/apps/mf-videos/node_modules/.federation/tsconfig.330e3d0a1dab9019d5d2e83edff4b3ee.json\\\"\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
+    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"/home/dcm/.nvm/versions/node/v24.22.1/bin/node \\\"/home/dcm/Área de Trabalho/teste-front-end-2026/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/bin/tsc\\\" --project \\\"/home/dcm/Área de Trabalho/teste-front-end-2026/apps/mf-videos/node_modules/.federation/tsconfig.93b43bf7580ca6aa503b2d41e24d9fcf.json\\\"\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
     "args": {
-      "cmd": "/home/dcm/.nvm/versions/node/v24.22.1/bin/node \"/home/dcm/Área de Trabalho/teste-front-end-2026/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/bin/tsc\" --project \"/home/dcm/Área de Trabalho/teste-front-end-2026/apps/mf-videos/node_modules/.federation/tsconfig.330e3d0a1dab9019d5d2e83edff4b3ee.json\""
+      "cmd": "/home/dcm/.nvm/versions/node/v24.22.1/bin/node \"/home/dcm/Área de Trabalho/teste-front-end-2026/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/bin/tsc\" --project \"/home/dcm/Área de Trabalho/teste-front-end-2026/apps/mf-videos/node_modules/.federation/tsconfig.93b43bf7580ca6aa503b2d41e24d9fcf.json\""
     },
-    "timestamp": 1793500081187
+    "timestamp": 1793652010246
   }
 }
