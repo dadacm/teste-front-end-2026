@@ -1,7 +1,11 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
+import {
+  FAVORITES_UPDATED_EVENT,
+  type FavoritesUpdatedDetail,
+  type NavigationPath,
+} from "@icasei/contracts";
 
-import type { NavigationPath } from "@icasei/contracts";
 import { useFetch } from "@icasei/hooks";
 
 import { MicroFrontendErrorBoundary } from "../components/MicroFrontendErrorBoundary/MicroFrontendErrorBoundary";
@@ -12,6 +16,8 @@ const RemoteDrawer = lazy(() => import("mf_drawer/DrawerApp"));
 export function AppLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const [favoritesCount, setFavoritesCount] = useState(0);
 
   const currentPath: NavigationPath = pathname === "/favorites" ? "/favorites" : "/videos";
 
@@ -24,6 +30,24 @@ export function AppLayout() {
       navigate("/login", { replace: true });
     },
   });
+
+  useEffect(() => {
+    const handleFavoritesUpdated = (event: Event) => {
+      const customEvent = event as CustomEvent<FavoritesUpdatedDetail>;
+
+      const count = customEvent.detail?.count;
+
+      if (typeof count === "number" && Number.isInteger(count) && count >= 0) {
+        setFavoritesCount(count);
+      }
+    };
+
+    window.addEventListener(FAVORITES_UPDATED_EVENT, handleFavoritesUpdated);
+
+    return () => {
+      window.removeEventListener(FAVORITES_UPDATED_EVENT, handleFavoritesUpdated);
+    };
+  }, []);
 
   const handleLogout = () => {
     if (isLoggingOut) return;
@@ -39,7 +63,7 @@ export function AppLayout() {
             <Suspense fallback={<p>Carregando menu...</p>}>
               <RemoteDrawer
                 currentPath={currentPath}
-                favoritesCount={0}
+                favoritesCount={favoritesCount}
                 onNavigate={(path: NavigationPath) => navigate(path)}
                 onLogout={handleLogout}
                 isLoggingOut={isLoggingOut}

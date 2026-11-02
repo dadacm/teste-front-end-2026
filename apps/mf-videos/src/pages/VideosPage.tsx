@@ -16,6 +16,7 @@ import { addFavorite, getFavorites, removeFavorite } from "../controllers/favori
 import { EmptyState } from "../components/EmptyState/EmptyState";
 import { VideoList } from "../components/VideoList/VideoList";
 import { Search, SearchX } from "lucide-react";
+import { notifyFavoritesUpdated } from "../utils/favorites.events";
 
 export function VideosPage() {
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
@@ -35,6 +36,7 @@ export function VideosPage() {
   } = useFetch<FavoritesResponse, void>(getFavorites, {
     onSuccess: (response) => {
       setFavoriteIds(new Set(response.items.map((favorite) => favorite.id)));
+      notifyFavoritesUpdated(response.count);
       setBusyVideoId(null);
     },
     onError: () => {

@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
+
 import type { FavoriteItem, FavoritesResponse } from "@icasei/contracts";
+
 import { useFetch } from "@icasei/hooks";
+
 import "../index.css";
+
 import { EmptyState } from "../components/EmptyState/EmptyState";
 import { LoadingSpinner } from "../components/LoaddingSpinner/LoaddingSpinner";
 import { VideoList } from "../components/VideoList/VideoList";
 import { VideoPlayer } from "../components/VideoPlayer/VideoPlayer";
+
 import { getFavorites, removeFavorite } from "../controllers/favorites.controller";
+
+import { notifyFavoritesUpdated } from "../utils/favorites.events";
 
 export function FavoritesPage() {
   const [selectedVideo, setSelectedVideo] = useState<FavoriteItem | null>(null);
@@ -19,7 +26,11 @@ export function FavoritesPage() {
     error,
     status,
     execute: loadFavorites,
-  } = useFetch<FavoritesResponse, void>(getFavorites);
+  } = useFetch<FavoritesResponse, void>(getFavorites, {
+    onSuccess: (response) => {
+      notifyFavoritesUpdated(response.count);
+    },
+  });
 
   const { error: removeError, execute: executeRemoveFavorite } = useFetch<void, string>(
     removeFavorite,

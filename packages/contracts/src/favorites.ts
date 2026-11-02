@@ -10,3 +10,9 @@ export interface FavoritesResponse {
   items: FavoriteItem[];
   count: number;
 }
+
+export const FAVORITES_UPDATED_EVENT = "icasei:favorites-updated";
+
+export interface FavoritesUpdatedDetail {
+  count: number;
+}
