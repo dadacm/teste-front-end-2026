@@ -5,6 +5,7 @@ import { createAuthRouter } from "./routes/auth/auth.routes.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import cookieParser from "cookie-parser";
 import { createVideosRouter } from "./routes/videos/videos.routes.js";
+import { createFavoritesRouter } from "./routes/favorites/favorites.routes.js";
 
 export function createApp(database: DatabaseSync) {
   const app = express();
@@ -17,7 +18,7 @@ export function createApp(database: DatabaseSync) {
   app.use("/api/health", healthRouter);
   app.use("/api/videos", createVideosRouter(database));
   app.use("/api/auth", createAuthRouter(database));
-
+  app.use("/api/favorites", createFavoritesRouter(database));
   app.use(errorHandler);
 
   return app;
