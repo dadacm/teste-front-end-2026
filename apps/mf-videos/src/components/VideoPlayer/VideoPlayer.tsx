@@ -2,7 +2,7 @@ import type { VideoItem } from "@icasei/contracts";
 import { X } from "lucide-react";
 
 interface VideoPlayerProps {
-  video: VideoItem;
+  video: Pick<VideoItem, "id" | "title" | "channelTitle">;
   onClose: () => void;
 }
 

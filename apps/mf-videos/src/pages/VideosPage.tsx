@@ -1,21 +1,78 @@
-import { useState } from "react";
-import type { SearchVideosResponse, VideoItem } from "@icasei/contracts";
+import { useEffect, useState } from "react";
+import type {
+  CreateFavoriteInput,
+  FavoriteItem,
+  FavoritesResponse,
+  SearchVideosResponse,
+  VideoItem,
+} from "@icasei/contracts";
 import { useFetch } from "@icasei/hooks";
 import "../index.css";
 import { SearchInput } from "../components/SearchInput/SearchInput";
-import { VideoCard } from "../components/VideoCard/VideoCard";
 import { VideoPlayer } from "../components/VideoPlayer/VideoPlayer";
-import { getVideos } from "../controllers/video.controller";
 import { LoadingSpinner } from "../components/LoaddingSpinner/LoaddingSpinner";
+import { getVideos } from "../controllers/video.controller";
+import { addFavorite, getFavorites, removeFavorite } from "../controllers/favorites.controller";
+import { EmptyState } from "../components/EmptyState/EmptyState";
+import { VideoList } from "../components/VideoList/VideoList";
+import { Search, SearchX } from "lucide-react";
 
 export function VideosPage() {
+  const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
+
+  const [favoriteIds, setFavoriteIds] = useState<Set<string>>(() => new Set());
+
+  const [busyVideoId, setBusyVideoId] = useState<string | null>(null);
+
   const { data, error, status, execute, isLoading } = useFetch<SearchVideosResponse, string>(
     getVideos,
   );
 
-  const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
+  const {
+    error: favoritesError,
+    status: favoritesStatus,
+    execute: loadFavorites,
+  } = useFetch<FavoritesResponse, void>(getFavorites, {
+    onSuccess: (response) => {
+      setFavoriteIds(new Set(response.items.map((favorite) => favorite.id)));
+      setBusyVideoId(null);
+    },
+    onError: () => {
+      setBusyVideoId(null);
+    },
+  });
+
+  const { error: addFavoriteError, execute: executeAddFavorite } = useFetch<
+    FavoriteItem,
+    CreateFavoriteInput
+  >(addFavorite, {
+    onSuccess: () => {
+      void loadFavorites(undefined);
+    },
+    onError: () => {
+      setBusyVideoId(null);
+    },
+  });
+
+  const { error: removeFavoriteError, execute: executeRemoveFavorite } = useFetch<void, string>(
+    removeFavorite,
+    {
+      onSuccess: () => {
+        void loadFavorites(undefined);
+      },
+      onError: () => {
+        setBusyVideoId(null);
+      },
+    },
+  );
+
+  useEffect(() => {
+    void loadFavorites(undefined);
+  }, [loadFavorites]);
 
   const videosList = data?.items ?? [];
+
+  const favoriteMutationError = addFavoriteError ?? removeFavoriteError;
 
   function handleSearch(query: string) {
     setSelectedVideo(null);
@@ -30,16 +87,39 @@ export function VideosPage() {
     setSelectedVideo(null);
   }
 
+  function handleToggleFavorite(video: VideoItem) {
+    if (favoritesStatus !== "success" || busyVideoId !== null) {
+      return;
+    }
+
+    setBusyVideoId(video.id);
+
+    if (favoriteIds.has(video.id)) {
+      void executeRemoveFavorite(video.id);
+      return;
+    }
+
+    void executeAddFavorite({
+      id: video.id,
+      title: video.title,
+      channelTitle: video.channelTitle,
+      thumbnailUrl: video.thumbnailUrl,
+    });
+  }
+
   const renderVideoPlayer = () =>
     selectedVideo && <VideoPlayer video={selectedVideo} onClose={handleClosePlayer} />;
-
-  const renderVideosList = () =>
-    videosList.map((video) => <VideoCard key={video.id} video={video} onPlay={handlePlay} />);
 
   const renderSearchContent = () => {
     switch (status) {
       case "idle":
-        return <p className="text-text-secondary">Faça uma pesquisa para encontrar vídeos.</p>;
+        return (
+          <EmptyState
+            icon={<Search size={28} aria-hidden="true" />}
+            title="Encontre seus vídeos"
+            description="Digite o nome de um vídeo ou assunto para começar a pesquisar."
+          />
+        );
 
       case "loading":
         return (
@@ -57,15 +137,25 @@ export function VideosPage() {
 
       case "success":
         if (videosList.length === 0) {
-          return <p>Nenhum vídeo encontrado.</p>;
+          return (
+            <EmptyState
+              icon={<SearchX size={28} aria-hidden="true" />}
+              title="Nenhum vídeo encontrado"
+              description="Não encontramos resultados para sua pesquisa. Tente utilizar outros termos."
+            />
+          );
         }
 
         return (
-          <section aria-label="Resultados da pesquisa">
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {renderVideosList()}
-            </div>
-          </section>
+          <VideoList
+            videos={videosList}
+            label="Resultados da pesquisa"
+            onPlay={handlePlay}
+            onToggleFavorite={handleToggleFavorite}
+            isFavorite={(video) => favoriteIds.has(video.id)}
+            favoriteLoadingId={busyVideoId}
+            disableFavoriteActions={favoritesStatus !== "success" || busyVideoId !== null}
+          />
         );
 
       default:
@@ -82,6 +172,38 @@ export function VideosPage() {
       </header>
 
       <SearchInput onSearch={handleSearch} isLoading={isLoading} />
+
+      {(favoritesStatus === "idle" || favoritesStatus === "loading") && (
+        <p role="status" className="text-sm text-text-secondary">
+          Sincronizando favoritos...
+        </p>
+      )}
+
+      {favoritesStatus === "error" && (
+        <div
+          role="alert"
+          className="flex flex-wrap items-center gap-3 rounded-lg border border-red-400/30 bg-red-400/10 p-3 text-sm text-red-200"
+        >
+          <p>{favoritesError ?? "Não foi possível carregar os favoritos."}</p>
+
+          <button
+            type="button"
+            onClick={() => void loadFavorites(undefined)}
+            className="font-semibold underline underline-offset-2"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      )}
+
+      {favoriteMutationError && (
+        <p
+          role="alert"
+          className="rounded-lg border border-red-400/30 bg-red-400/10 p-3 text-sm text-red-200"
+        >
+          {favoriteMutationError}
+        </p>
+      )}
 
       {renderVideoPlayer()}
 
