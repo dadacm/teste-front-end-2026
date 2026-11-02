@@ -1,25 +1,21 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router";
-
 import { AppLayout } from "./apps/AppLayout";
 import { MicroFrontendErrorBoundary } from "./components/MicroFrontendErrorBoundary/MicroFrontendErrorBoundary";
+import { RequireAuth } from "./components/RequireAuth/RequireAuth";
+import LoginPage from "./pages/LoginPage";
 
 const VideosPage = lazy(() => import("mf_videos/VideosPage"));
-
 const FavoritesPage = lazy(() => import("mf_videos/FavoritesPage"));
-
-function LoginPage() {
-  return <h2>Login em desenvolvimento</h2>;
-}
 
 export default function App() {
   return (
-    <Suspense fallback={<p>Carregando página...</p>}>
-      <Routes>
-        <Route path="/" element={<Navigate to="/videos" replace />} />
+    <Routes>
+      <Route path="/" element={<Navigate to="/videos" replace />} />
 
-        <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
 
+      <Route element={<RequireAuth />}>
         <Route element={<AppLayout />}>
           <Route
             path="/videos"
@@ -31,6 +27,7 @@ export default function App() {
               </MicroFrontendErrorBoundary>
             }
           />
+
           <Route
             path="/favorites"
             element={
@@ -42,9 +39,9 @@ export default function App() {
             }
           />
         </Route>
+      </Route>
 
-        <Route path="*" element={<h2>Página não encontrada</h2>} />
-      </Routes>
-    </Suspense>
+      <Route path="*" element={<h2>Página não encontrada</h2>} />
+    </Routes>
   );
 }

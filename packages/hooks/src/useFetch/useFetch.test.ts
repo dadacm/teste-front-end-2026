@@ -142,4 +142,37 @@ describe("useFetch", () => {
 
     expect(requestSignal?.aborted).toBe(true);
   });
+  it("executa onSuccess após uma requisição bem-sucedida", async () => {
+    const onSuccess = vi.fn();
+    const fetcher = vi.fn().mockResolvedValue({
+      message: "Operação concluída",
+    });
+
+    const { result } = renderHook(() => useFetch(fetcher, { onSuccess }));
+
+    await act(async () => {
+      await result.current.execute(undefined);
+    });
+
+    expect(onSuccess).toHaveBeenCalledWith({
+      message: "Operação concluída",
+    });
+  });
+
+  it("executa onError quando a requisição falha", async () => {
+    const onError = vi.fn();
+    const requestError = new Error("Erro na requisição");
+
+    const fetcher = vi.fn().mockRejectedValue(requestError);
+
+    const { result } = renderHook(() => useFetch(fetcher, { onError }));
+
+    await act(async () => {
+      await result.current.execute(undefined);
+    });
+
+    expect(onError).toHaveBeenCalledWith(requestError);
+    expect(result.current.status).toBe("error");
+    expect(result.current.error).toBe("Erro na requisição");
+  });
 });

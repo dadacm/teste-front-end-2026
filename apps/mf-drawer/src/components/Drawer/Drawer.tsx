@@ -1,5 +1,5 @@
 import type { MouseEvent } from "react";
-import { Clapperboard, Heart, PlayCircle } from "lucide-react";
+import { Clapperboard, Heart, LogOut, PlayCircle } from "lucide-react";
 
 import type { DrawerProps, NavigationPath } from "@icasei/contracts";
 
@@ -7,11 +7,10 @@ export function Drawer({
   currentPath,
   favoritesCount,
   onNavigate,
+  isLoggingOut,
+  onLogout,
 }: DrawerProps) {
-  function handleNavigate(
-    event: MouseEvent<HTMLAnchorElement>,
-    path: NavigationPath,
-  ) {
+  function handleNavigate(event: MouseEvent<HTMLAnchorElement>, path: NavigationPath) {
     if (
       event.defaultPrevented ||
       event.button !== 0 ||
@@ -44,11 +43,7 @@ export function Drawer({
     <aside className="w-full bg-sidebar p-4 md:min-h-screen md:p-6">
       <div className="mb-6 flex items-center gap-3">
         <div className="flex size-10 items-center justify-center rounded-xl bg-brand">
-          <PlayCircle
-            size={22}
-            className="text-background"
-            aria-hidden="true"
-          />
+          <PlayCircle size={22} className="text-background" aria-hidden="true" />
         </div>
 
         <div>
@@ -70,20 +65,11 @@ export function Drawer({
                   href={item.path}
                   aria-current={isActive ? "page" : undefined}
                   onClick={(event) => handleNavigate(event, item.path)}
-                  className={`
-                    flex items-center gap-3
-                    rounded-xl px-4 py-3
-                    text-sm font-medium
-                    transition-colors
-                    focus-visible:outline-2
-                    focus-visible:outline-offset-2
-                    focus-visible:outline-brand
-                    ${
-                      isActive
-                        ? "bg-surface-hover text-brand"
-                        : "text-text-secondary hover:bg-surface hover:text-text-primary"
-                    }
-                  `}
+                  className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                    isActive
+                      ? "bg-surface-hover text-brand"
+                      : "text-text-secondary hover:bg-surface hover:text-text-primary"
+                  } `}
                 >
                   <Icon size={19} aria-hidden="true" className="shrink-0" />
 
@@ -93,6 +79,19 @@ export function Drawer({
             );
           })}
         </ul>
+        {onLogout && (
+          <button
+            type="button"
+            onClick={onLogout}
+            disabled={isLoggingOut}
+            aria-busy={isLoggingOut}
+            className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <LogOut size={18} aria-hidden="true" />
+
+            <span>{isLoggingOut ? "Saindo..." : "Sair"}</span>
+          </button>
+        )}
       </nav>
     </aside>
   );

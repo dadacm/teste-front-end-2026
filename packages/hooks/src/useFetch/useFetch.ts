@@ -4,17 +4,28 @@ export type FetchStatus = "idle" | "loading" | "success" | "error";
 
 export type Fetcher<TData, TParams> = (params: TParams, signal: AbortSignal) => Promise<TData>;
 
-export function useFetch<TData, TParams>(fetcher: Fetcher<TData, TParams>) {
+export type UseFetchOptions<TData> = {
+  onSuccess?: (data: TData) => void;
+  onError?: (error: Error) => void;
+};
+
+export function useFetch<TData, TParams>(
+  fetcher: Fetcher<TData, TParams>,
+  options?: UseFetchOptions<TData>,
+) {
   const [data, setData] = useState<TData | null>(null);
   const [status, setStatus] = useState<FetchStatus>("idle");
   const [error, setError] = useState<string | null>(null);
 
   const controllerRef = useRef<AbortController | null>(null);
+  const callbacksRef = useRef(options);
 
   useEffect(() => {
-    return () => {
-      controllerRef.current?.abort();
-    };
+    callbacksRef.current = options;
+  }, [options]);
+
+  useEffect(() => {
+    return () => controllerRef.current?.abort();
   }, []);
 
   const execute = useCallback(
@@ -28,38 +39,43 @@ export function useFetch<TData, TParams>(fetcher: Fetcher<TData, TParams>) {
       setData(null);
       setError(null);
 
+      let response: TData;
+
       try {
-        const response = await fetcher(params, controller.signal);
-
-        if (controller.signal.aborted) {
-          return;
-        }
-
-        setData(response);
-        setStatus("success");
-
-        return response;
+        response = await fetcher(params, controller.signal);
       } catch (err) {
-        if (controller.signal.aborted) {
-          return;
-        }
+        if (controller.signal.aborted) return;
 
-        setError(err instanceof Error ? err.message : "Erro ao realizar requisição.");
+        const normalizedError =
+          err instanceof Error ? err : new Error("Erro ao realizar requisição.");
 
+        setError(normalizedError.message);
         setStatus("error");
+
+        callbacksRef.current?.onError?.(normalizedError);
+        return;
       } finally {
         if (controllerRef.current === controller) {
           controllerRef.current = null;
         }
       }
+
+      if (controller.signal.aborted) return;
+
+      setData(response);
+      setStatus("success");
+
+      callbacksRef.current?.onSuccess?.(response);
+
+      return response;
     },
     [fetcher],
   );
 
   return {
     data,
-    status,
     error,
+    status,
     execute,
     isLoading: status === "loading",
   };

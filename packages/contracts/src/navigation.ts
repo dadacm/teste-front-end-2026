@@ -4,4 +4,6 @@ export interface DrawerProps {
   currentPath: NavigationPath;
   favoritesCount: number;
   onNavigate: (path: NavigationPath) => void;
+  onLogout?: () => void;
+  isLoggingOut?: boolean;
 }
