@@ -6,15 +6,16 @@ import { SearchInput } from "../components/SearchInput/SearchInput";
 import { VideoCard } from "../components/VideoCard/VideoCard";
 import { VideoPlayer } from "../components/VideoPlayer/VideoPlayer";
 import { getVideos } from "../controllers/video.controller";
+import { LoadingSpinner } from "../components/LoaddingSpinner/LoaddingSpinner";
 
 export function VideosPage() {
-  const { data, status, error, execute, isLoading } = useFetch<SearchVideosResponse, string>(
+  const { data, error, status, execute, isLoading } = useFetch<SearchVideosResponse, string>(
     getVideos,
   );
 
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
 
-  const videos = data?.items ?? [];
+  const videosList = data?.items ?? [];
 
   function handleSearch(query: string) {
     setSelectedVideo(null);
@@ -29,8 +30,51 @@ export function VideosPage() {
     setSelectedVideo(null);
   }
 
+  const renderVideoPlayer = () =>
+    selectedVideo && <VideoPlayer video={selectedVideo} onClose={handleClosePlayer} />;
+
+  const renderVideosList = () =>
+    videosList.map((video) => <VideoCard key={video.id} video={video} onPlay={handlePlay} />);
+
+  const renderSearchContent = () => {
+    switch (status) {
+      case "idle":
+        return <p className="text-text-secondary">Faça uma pesquisa para encontrar vídeos.</p>;
+
+      case "loading":
+        return (
+          <div className="flex h-full w-full items-center justify-center">
+            <LoadingSpinner />
+          </div>
+        );
+
+      case "error":
+        return (
+          <p role="alert" className="text-red-200">
+            {error ?? "Não foi possível buscar os vídeos."}
+          </p>
+        );
+
+      case "success":
+        if (videosList.length === 0) {
+          return <p>Nenhum vídeo encontrado.</p>;
+        }
+
+        return (
+          <section aria-label="Resultados da pesquisa">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {renderVideosList()}
+            </div>
+          </section>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
+    <div className="mx-auto flex h-full w-full max-w-7xl flex-col gap-8">
       <header className="space-y-2">
         <h1 className="text-2xl font-bold text-text-primary sm:text-3xl">Explore vídeos</h1>
 
@@ -39,50 +83,9 @@ export function VideosPage() {
 
       <SearchInput onSearch={handleSearch} isLoading={isLoading} />
 
-      {selectedVideo && <VideoPlayer video={selectedVideo} onClose={handleClosePlayer} />}
+      {renderVideoPlayer()}
 
-      {status === "idle" && (
-        <div className="rounded-2xl border border-border-ui bg-surface p-8 text-center">
-          <p className="text-text-secondary">Faça uma pesquisa para encontrar vídeos.</p>
-        </div>
-      )}
-
-      {isLoading && (
-        <div
-          role="status"
-          className="rounded-2xl border border-border-ui bg-surface p-8 text-center"
-        >
-          <p className="text-text-secondary">Buscando vídeos...</p>
-        </div>
-      )}
-
-      {status === "error" && (
-        <div role="alert" className="rounded-2xl border border-red-400/30 bg-red-400/10 p-6">
-          <p className="text-red-200">{error ?? "Não foi possível buscar os vídeos."}</p>
-        </div>
-      )}
-
-      {status === "success" && videos.length === 0 && (
-        <div className="rounded-2xl border border-border-ui bg-surface p-8 text-center">
-          <p className="text-text-secondary">Nenhum vídeo encontrado.</p>
-        </div>
-      )}
-
-      {status === "success" && videos.length > 0 && (
-        <section aria-label="Resultados da pesquisa">
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-text-primary">Resultados</h2>
-
-            <span className="text-sm text-text-secondary">{videos.length} vídeos</span>
-          </div>
-
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {videos.map((video) => (
-              <VideoCard key={video.id} video={video} onPlay={handlePlay} />
-            ))}
-          </div>
-        </section>
-      )}
+      {renderSearchContent()}
     </div>
   );
 }
