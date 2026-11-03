@@ -6,6 +6,7 @@ import { useFetch } from "@icasei/hooks";
 
 import { loginUser } from "../controllers/auth.controller";
 import type { LoginCredentials } from "../services/auth.api";
+import { Input } from "../components/Input/Input";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -51,39 +52,27 @@ export function LoginPage() {
             handleLogin();
           }}
         >
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="text-sm font-medium">
-              E-mail
-            </label>
+          <Input
+            id="email"
+            label="E-mail"
+            type="email"
+            placeholder="seu@email.com"
+            autoComplete="username"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
 
-            <input
-              id="email"
-              type="email"
-              autoComplete="username"
-              placeholder="seu@email.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-              className="w-full rounded-lg border border-border-ui bg-background px-4 py-3 transition-colors outline-none placeholder:text-text-muted focus:border-brand"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="text-sm font-medium">
-              Senha
-            </label>
-
-            <input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="Digite sua senha"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-              className="w-full rounded-lg border border-border-ui bg-background px-4 py-3 transition-colors outline-none placeholder:text-text-muted focus:border-brand"
-            />
-          </div>
+          <Input
+            id="password"
+            label="Senha"
+            type="password"
+            placeholder="Digite sua senha"
+            autoComplete="current-password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
 
           {error && (
             <p

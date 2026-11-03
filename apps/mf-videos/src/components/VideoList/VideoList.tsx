@@ -1,18 +1,5 @@
-import type { VideoItem } from "@icasei/contracts";
-
 import { VideoCard } from "../VideoCard/VideoCard";
-
-type VideoPreview = Pick<VideoItem, "id" | "title" | "channelTitle" | "thumbnailUrl">;
-
-interface VideoListProps<TVideo extends VideoPreview> {
-  videos: TVideo[];
-  label: string;
-  onPlay: (video: TVideo) => void;
-  onToggleFavorite?: (video: TVideo) => void;
-  isFavorite?: (video: TVideo) => boolean;
-  favoriteLoadingId?: string | null;
-  disableFavoriteActions?: boolean;
-}
+import type { VideoListProps, VideoPreview } from "./VideoList.types";
 
 export function VideoList<TVideo extends VideoPreview>({
   videos,

@@ -1,10 +1,5 @@
-import type { VideoItem } from "@icasei/contracts";
 import { X } from "lucide-react";
-
-interface VideoPlayerProps {
-  video: Pick<VideoItem, "id" | "title" | "channelTitle">;
-  onClose: () => void;
-}
+import type { VideoPlayerProps } from "./VideoPlayer.types";
 
 export function VideoPlayer({ video, onClose }: VideoPlayerProps) {
   return (

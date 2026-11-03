@@ -1,16 +1,5 @@
-import type { VideoItem } from "@icasei/contracts";
 import { LoaderCircle, Play, Star } from "lucide-react";
-
-type VideoPreview = Pick<VideoItem, "id" | "title" | "channelTitle" | "thumbnailUrl">;
-
-interface VideoCardProps<TVideo extends VideoPreview> {
-  video: TVideo;
-  onPlay: (video: TVideo) => void;
-  isFavorite?: boolean;
-  onToggleFavorite?: (video: TVideo) => void;
-  isFavoriteLoading?: boolean;
-  isFavoriteDisabled?: boolean;
-}
+import type { VideoCardProps, VideoPreview } from "./VideoCard.types";
 
 export function VideoCard<TVideo extends VideoPreview>({
   video,

@@ -1,11 +1,7 @@
 import { useState, type SubmitEvent } from "react";
 import { Search } from "lucide-react";
 import { Button } from "../Button/Button";
-
-interface SearchInputProps {
-  onSearch: (query: string) => void;
-  isLoading?: boolean;
-}
+import type { SearchInputProps } from "./searchInput.types";
 
 export function SearchInput({ onSearch, isLoading = false }: SearchInputProps) {
   const [query, setQuery] = useState("");

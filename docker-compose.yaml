@@ -1,4 +1,45 @@
 services:
+  mf-videos:
+    build:
+      context: .
+      dockerfile: apps/mf-videos/Dockerfile
+      args:
+        VITE_USE_MOCKS: "false"
+
+    container_name: icasei-mf-videos
+
+    ports:
+      - "127.0.0.1:5175:80"
+
+    restart: unless-stopped
+  mf-drawer:
+    build:
+      context: .
+      dockerfile: apps/mf-drawer/Dockerfile
+
+    container_name: icasei-mf-drawer
+
+    ports:
+      - "127.0.0.1:5174:80"
+
+    restart: unless-stopped
+  shell:
+    build:
+      context: .
+      dockerfile: apps/shell/Dockerfile
+      args:
+        VITE_USE_MOCKS: "false"
+
+    container_name: icasei-shell
+
+    ports:
+      - "127.0.0.1:5173:80"
+
+    depends_on:
+      bff:
+        condition: service_healthy
+
+    restart: unless-stopped
   bff:
     build:
       context: .
