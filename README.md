@@ -23,8 +23,6 @@ A interface utiliza o tema **Midnight Blue — iCasei Edition**, documentado com
 - [Imagem de prévia da referência HTML](docs/design-reference-preview.png)
 - [Checklist de validação da entrega](docs/VALIDACAO.md)
 
-**Nota:** a referência visual foi consolidada a partir da aplicação implementada; os vídeos do mockup são ilustrativos, pois títulos e thumbnails reais dependem da API do YouTube. Para evidência de correspondência pixel a pixel, utilize capturas da aplicação em execução.
-
 ## Tecnologias
 
 | Camada           | Tecnologias                                             |
