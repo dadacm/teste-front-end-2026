@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { LoaderCircle, LogIn } from "lucide-react";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 import { useFetch } from "@icasei/hooks";
 
@@ -98,6 +98,12 @@ export function LoginPage() {
             {isLoading ? "Entrando..." : "Entrar"}
           </button>
         </form>
+        <p className="mt-6 text-center text-sm text-text-secondary">
+          Ainda não possui uma conta?{" "}
+          <Link to="/register" className="font-semibold text-brand hover:underline">
+            Cadastre-se
+          </Link>
+        </p>
       </section>
     </main>
   );

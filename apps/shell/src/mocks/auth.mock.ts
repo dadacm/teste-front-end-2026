@@ -1,4 +1,4 @@
-import type { LoginCredentials } from "../services/auth.api";
+import type { LoginCredentials, RegisterCredentials } from "../services/auth.api";
 
 const MOCK_SESSION_KEY = "icasei_mock_session";
 
@@ -16,4 +16,16 @@ export async function checkSessionMock(): Promise<boolean> {
 
 export async function logoutMock(): Promise<void> {
   sessionStorage.removeItem(MOCK_SESSION_KEY);
+}
+
+const mockUsers = new Map<string, string>([["teste@exemplo.com", "senha123"]]);
+
+export async function registerMock({ email, password }: RegisterCredentials): Promise<void> {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  if (mockUsers.has(normalizedEmail)) {
+    throw new Error("Este e-mail já está cadastrado.");
+  }
+
+  mockUsers.set(normalizedEmail, password);
 }

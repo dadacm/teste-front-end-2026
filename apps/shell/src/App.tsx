@@ -4,6 +4,7 @@ import { AppLayout } from "./apps/AppLayout";
 import { MicroFrontendErrorBoundary } from "./components/MicroFrontendErrorBoundary/MicroFrontendErrorBoundary";
 import { RequireAuth } from "./components/RequireAuth/RequireAuth";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 const VideosPage = lazy(() => import("mf_videos/VideosPage"));
 const FavoritesPage = lazy(() => import("mf_videos/FavoritesPage"));
@@ -14,7 +15,7 @@ export default function App() {
       <Route path="/" element={<Navigate to="/videos" replace />} />
 
       <Route path="/login" element={<LoginPage />} />
-
+      <Route path="/register" element={<RegisterPage />} />
       <Route element={<RequireAuth />}>
         <Route element={<AppLayout />}>
           <Route

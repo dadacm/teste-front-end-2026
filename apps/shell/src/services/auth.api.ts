@@ -53,7 +53,38 @@ export async function logout(signal: AbortSignal): Promise<void> {
   }
 }
 
-// Adaptadores para operações sem parâmetros.
 export const verifySession = (...args: [void, AbortSignal]) => checkSession(args[1]);
 
 export const endSession = (...args: [void, AbortSignal]) => logout(args[1]);
+
+export type RegisterCredentials = {
+  email: string;
+  password: string;
+};
+
+export async function register(
+  credentials: RegisterCredentials,
+  signal: AbortSignal,
+): Promise<void> {
+  const response = await fetch("/api/auth/register", {
+    method: "POST",
+    credentials: "include",
+    signal,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  });
+
+  if (response.status === 409) {
+    throw new Error("Este e-mail já está cadastrado.");
+  }
+
+  if (response.status === 400) {
+    throw new Error("Confira o e-mail e os requisitos da senha.");
+  }
+
+  if (!response.ok) {
+    throw new Error("Não foi possível criar sua conta.");
+  }
+}

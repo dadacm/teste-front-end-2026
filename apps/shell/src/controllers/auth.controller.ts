@@ -1,6 +1,6 @@
-import type { LoginCredentials } from "../services/auth.api";
+import type { LoginCredentials, RegisterCredentials } from "../services/auth.api";
 
-import { login, checkSession, logout } from "../services/auth.api";
+import { login, checkSession, logout, register } from "../services/auth.api";
 
 const useMocks = import.meta.env.VITE_USE_MOCKS === "true";
 
@@ -32,4 +32,17 @@ export async function endSession(...args: [void, AbortSignal]): Promise<void> {
   }
 
   return logout(args[1]);
+}
+
+export async function registerUser(
+  credentials: RegisterCredentials,
+  signal: AbortSignal,
+): Promise<void> {
+  if (useMocks) {
+    const { registerMock } = await import("../mocks/auth.mock");
+
+    return registerMock(credentials);
+  }
+
+  return register(credentials, signal);
 }

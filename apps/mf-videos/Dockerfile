@@ -1,5 +1,3 @@
-
-# Etapa 1: build da aplicação
 FROM node:24-alpine AS builder
 
 WORKDIR /app
