@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>iCaseiHub • Referência visual da interface</title>
+<style>
+  :root { --brand:#94caf3; --brand-hover:#b9e0fa; --background:#0b1726; --sidebar:#122337; --surface:#1b3045; --surface-hover:#24445c; --border-ui:#344d62; --text-primary:#f8fbff; --text-secondary:#a6bdce; --text-muted:#8da8bc; --font-sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+  *{box-sizing:border-box} body{margin:0;background:#07111e;color:var(--text-primary);font-family:var(--font-sans)}
+  main.board{max-width:1800px;margin:auto;padding:36px 42px 54px}
+  header.board-header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-bottom:25px;border-bottom:1px solid #344d62}
+  .brandline{display:flex;gap:15px;align-items:center}.brand-icon{background:var(--brand);border-radius:13px;width:48px;height:48px;display:grid;place-items:center;color:var(--background);font-size:24px;font-weight:900}
+  h1{font-size:30px;letter-spacing:-.65px;margin:0} .sub{color:var(--text-secondary);margin:7px 0 0;font-size:14px}.eyebrow{color:var(--brand);font-size:12px;font-weight:700;letter-spacing:.11em;text-transform:uppercase}
+  h2.board-section{font-size:18px;margin:29px 0 16px}.subsection-note{font-size:12px;color:var(--text-secondary)}
+  .screen-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.screen-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.screen-title strong{font-size:14px}.screen-title small{font-size:11px;color:var(--text-secondary)}
+  .desktop-canvas{height:485px;border:1px solid var(--border-ui);border-radius:14px;background:var(--background);overflow:hidden;box-shadow:0 14px 35px #0006}
+  .login-wrap{height:100%;display:flex;align-items:center;justify-content:center;padding:18px}.login-card{border:1px solid var(--border-ui);border-radius:16px;background:var(--surface);padding:25px;width:100%;max-width:325px;box-shadow:0 20px 35px #0003}.login-card h2{font-size:26px;line-height:1.15;margin:0 0 9px;text-align:center}.login-card p{font-size:12px;line-height:1.55;color:var(--text-secondary);text-align:center;margin:0 0 28px}.login-card .field{margin:0 0 15px}.field label{display:block;font-weight:600;font-size:12px;margin-bottom:7px}.fake-input{background:var(--background);border:1px solid var(--border-ui);border-radius:8px;padding:11px 14px;color:var(--text-muted);font-size:13px}.primary-button{border:0;background:var(--brand);color:var(--background);font-weight:700;border-radius:8px;min-height:44px;padding:10px 15px;display:flex;align-items:center;justify-content:center;gap:9px}.login-card .primary-button{width:100%;margin-top:3px}
+  .app-shell{display:grid;grid-template-columns:131px minmax(0,1fr);height:100%}.sidebar{background:var(--sidebar);padding:15px 9px;border-right:1px solid var(--border-ui);display:flex;flex-direction:column}.logo-wrap{display:flex;align-items:center;gap:8px;margin-bottom:24px}.logo-icon{flex:none;width:27px;height:27px;border-radius:7px;background:var(--brand);color:var(--background);display:grid;place-items:center;font-size:14px}.logo-copy strong{display:block;font-size:12px;white-space:nowrap}.logo-copy small{display:block;color:var(--brand);font-size:9px}.navitem{display:flex;gap:6px;align-items:center;padding:9px;border-radius:9px;margin-bottom:6px;color:var(--text-secondary);font-size:11px;white-space:nowrap}.navitem svg{width:15px;height:15px;flex:none}.navitem.active{color:var(--brand);background:var(--surface-hover)}.navitem.logout{margin-top:8px}
+  .main-content{min-width:0;padding:24px 18px}.main-content h2{font-size:23px;letter-spacing:-.35px;margin:0 0 6px}.main-content p.subtitle{color:var(--text-secondary);font-size:11px;margin:0 0 19px}.searchbar{display:flex;gap:8px;margin-bottom:21px}.searchbox{border:1px solid var(--border-ui);border-radius:10px;background:var(--surface);color:var(--text-muted);padding:11px;font-size:11px;flex:1}.searchbar .primary-button{font-size:11px;min-height:37px;border-radius:10px;padding:8px 13px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.video-card{background:var(--surface);border:1px solid var(--border-ui);border-radius:12px;overflow:hidden}.thumbnail{aspect-ratio:16/9;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}.thumbnail.react{background:radial-gradient(circle at 60% 40%,#285d75 0%,#13364e 44%,#0a2037 100%)}.thumbnail.ts{background:linear-gradient(130deg,#245591,#174077,#0a2037)}.thumbnail.vite{background:linear-gradient(130deg,#28205e,#1f3660,#0d2440)}.thumb-mark{font-size:43px;line-height:1;color:#61dafb;font-weight:500}.thumbnail.ts .thumb-mark{background:#2177bf;color:#fff;font-size:22px;padding:12px 7px;border-radius:4px;font-weight:800}.thumbnail.vite .thumb-mark{font-size:35px;color:#b39cfb}.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:36px;width:36px;border-radius:50%;background:var(--brand);display:grid;place-items:center;color:var(--background);box-shadow:0 2px 12px #0009;font-size:15px}.heart{position:absolute;right:9px;top:9px;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#0b1726e8;border:1px solid #ffffff44;color:var(--text-primary);font-size:17px}.heart.filled{color:var(--brand)}.card-details{padding:10px}.card-details strong{display:block;font-size:11px;line-height:1.35;margin-bottom:4px}.card-details small{display:block;font-size:10px;color:var(--text-secondary)}.count{font-size:12px;color:var(--brand);margin:0 0 17px;font-weight:600}.empty{height:193px;border:1px solid var(--border-ui);background:var(--surface);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px}.empty-symbol{display:grid;place-items:center;border-radius:50%;height:51px;width:51px;background:var(--background);color:var(--brand);font-size:30px;margin-bottom:13px}.empty h3{font-size:16px;margin:0 0 6px}.empty p{font-size:11px;color:var(--text-secondary);line-height:1.55;margin:0}.empty .primary-button{margin-top:14px;font-size:11px;min-height:35px}
+  .lower{display:grid;grid-template-columns:1.35fr .65fr;gap:24px;margin-top:14px}.mobile-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;justify-items:center}.phone-wrap{text-align:center}.phone-title{font-size:12px;font-weight:650;margin-bottom:12px}.phone{width:195px;height:445px;border:5px solid #35536d;border-radius:25px;background:var(--background);overflow:hidden;box-shadow:0 9px 25px #0007;position:relative;text-align:left}.phone:after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);height:3px;width:56px;border-radius:5px;background:#dde9f5}.phone-login{display:flex;align-items:center;justify-content:center;padding:10px}.phone-login .login-card{padding:14px;border-radius:12px}.phone-login .login-card h2{font-size:18px}.phone-login .login-card p{font-size:9px;margin-bottom:12px}.phone-login .field label{font-size:10px}.phone-login .fake-input{font-size:10px;padding:8px 9px}.phone-login .primary-button{min-height:35px;font-size:10px}.mobile-app{padding:0}.mobile-top{background:var(--sidebar);padding:9px;border-bottom:1px solid var(--border-ui)}.mobile-top .logo-wrap{margin:0 0 10px}.mobile-top .navrow{display:flex;gap:2px}.mobile-top .navitem{font-size:8px;padding:6px 4px;margin:0;gap:3px}.mobile-top .navitem svg{width:10px;height:10px}.mobile-app-content{padding:12px 9px}.mobile-app-content h2{font-size:17px;margin:0 0 5px}.mobile-app-content .subtitle{color:var(--text-secondary);font-size:9px;line-height:1.4;margin:0 0 13px}.mobile-app-content .searchbar{flex-direction:column;gap:6px;margin-bottom:12px}.mobile-app-content .searchbox{font-size:9px;padding:9px}.mobile-app-content .primary-button{font-size:10px;min-height:29px}.mobile-app-content .cards{grid-template-columns:1fr;gap:8px}.mobile-app-content .thumbnail{aspect-ratio:16/8}.mobile-app-content .card-details{padding:7px}.mobile-app-content .card-details strong{font-size:10px}.mobile-app-content .card-details small{font-size:9px}.mobile-app-content .count{font-size:10px;margin-bottom:12px}.mobile-app-content .empty{padding:15px;height:175px}.mobile-app-content .empty h3{font-size:13px}.mobile-app-content .empty p{font-size:9px}
+  .details{border:1px solid var(--border-ui);border-radius:14px;background:var(--sidebar);padding:20px}.details h3{margin:0 0 13px;font-size:15px}.colorlist{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.colorbox{height:35px;border-radius:8px;border:1px solid #ffffff33}.color-entry code{font-size:9px;color:var(--text-secondary)}.color-entry label{display:block;font-size:9px;color:var(--text-primary);margin:5px 0 2px}.type{margin-top:22px;border-top:1px solid var(--border-ui);padding-top:14px}.type p{color:var(--text-secondary);font-size:12px;line-height:1.7;margin:7px 0}.tokens-chip{display:inline-block;border:1px solid var(--border-ui);padding:6px 9px;border-radius:8px;color:var(--text-secondary);font-size:11px;margin:0 5px 5px 0}.footer{text-align:center;font-size:11px;color:var(--text-muted);margin-top:22px}
+  @media(max-width:1220px){.screen-grid{grid-template-columns:1fr}.desktop-canvas{height:480px}.lower{grid-template-columns:1fr}.colorlist{grid-template-columns:repeat(5,1fr)}}
+  @media(max-width:760px){main.board{padding:20px 12px}.board-header{display:block}.screen-grid{display:block}.screen-grid>div{margin-bottom:23px}.desktop-canvas{height:390px}.mobile-grid{grid-template-columns:repeat(2,1fr);gap:17px}.colorlist{grid-template-columns:repeat(3,1fr)}}
+  
+  .secondary-action{text-align:center;font-size:11px;color:var(--text-secondary);padding-top:14px;white-space:normal}
+  .secondary-action span{font-weight:700;color:var(--brand)}
+  .register-card{max-width:360px;padding:18px 24px}
+  .register-card h2{font-size:24px}
+  .register-card p{margin-bottom:15px}
+  .register-card .field{margin-bottom:10px}
+  .register-card .fake-input{padding:8px 12px}
+  .register-card .field-help{color:var(--text-secondary);text-align:left;font-size:10px;margin:-7px 0 10px}
+  .register-icon{text-align:center;color:var(--brand);font-size:22px;margin:0 0 6px}
+  .phone-register .register-card{padding:11px 12px}
+  .phone-register .register-card h2{font-size:17px}
+  .phone-register .register-card p{font-size:8px;line-height:1.5;margin:4px 0 9px}
+  .phone-register .register-card .field{margin-bottom:8px}
+  .phone-register .register-card .fake-input{padding:7px 8px;font-size:9px}
+  .phone-register .register-card .field-help{font-size:8px;margin:-4px 0 8px}
+  .phone-register .secondary-action{font-size:8px;padding-top:8px}
+  .phone-login .secondary-action{font-size:9px;padding-top:10px}
+  @media(max-width:920px){.lower{grid-template-columns:1fr}.mobile-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.details{margin-top:18px}}
+  @media(max-width:820px){.mobile-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:24px}.screen-grid{grid-template-columns:1fr}}
+  @media(max-width:420px){.phone{width:min(42vw,195px)}.phone-login .login-card{padding:9px}.phone-register .register-card{padding:7px}.phone-register .register-card .fake-input{padding:6px}}
+</style>
+</head>
+<body>
+<main class="board">
+<header class="board-header"><div class="brandline"><div class="brand-icon">▶</div><div><div class="eyebrow">Documentação visual · Desafio front-end 2026</div><h1>iCaseiHub <span style="color:var(--brand)">— Midnight Blue</span></h1><p class="sub">Referência visual consolidada: login, cadastro, vídeos, favoritos e tokens do projeto</p></div></div><div class="subsection-note">React · Tailwind CSS v4 · Module Federation · BFF · SQLite</div></header>
+<h2 class="board-section">01 / Telas desktop <span class="subsection-note">— reproduções estáticas da interface</span></h2>
+<section class="screen-grid">
+<div><div class="screen-title"><strong>Tela de login</strong><small>/login</small></div><div class="desktop-canvas"><div class="login-wrap"><div class="login-card"><h2>Bem-vindo!</h2><p>Entre na sua conta para explorar e salvar seus vídeos favoritos.</p><div class="field"><label>E-mail</label><div class="fake-input">seu@email.com</div></div><div class="field"><label>Senha</label><div class="fake-input">Digite sua senha</div></div><div class="primary-button">➜  Entrar</div><div class="secondary-action">Ainda não possui uma conta? <span>Cadastre-se</span></div></div></div></div></div>
+<div>
+<div class="screen-title"><strong>Tela de cadastro</strong><small>/register</small></div>
+<div class="desktop-canvas">
+<div class="login-wrap">
+<div class="login-card register-card">
+<div aria-hidden="true" class="register-icon">♙ +</div>
+<h2>Crie sua conta</h2>
+<p>Cadastre-se para pesquisar, assistir e salvar seus vídeos favoritos.</p>
+<div class="field"><label>E-mail</label><div class="fake-input">seu@email.com</div></div>
+<div class="field"><label>Senha</label><div class="fake-input">Crie uma senha</div></div>
+<p class="field-help">Utilize pelo menos 12 caracteres.</p>
+<div class="field"><label>Confirme sua senha</label><div class="fake-input">Digite sua senha novamente</div></div>
+<div class="primary-button">♙ +   Criar conta</div>
+<div class="secondary-action">Já possui uma conta? <span>Entrar</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="screen-title"><strong>Pesquisa e listagem</strong><small>/videos</small></div><div class="desktop-canvas"><div class="app-shell"><div class="sidebar"><div class="logo-wrap"><div class="logo-icon">▶</div><div class="logo-copy"><strong>iCaseiHub</strong><small>Icasei Vídeos</small></div></div><div class="navitem active">▤   Vídeos</div><div class="navitem">♡   Favoritos (3)</div><div class="navitem logout">⇥   Sair</div></div><div class="main-content"><h2>Explore vídeos</h2><p class="subtitle">Pesquise, assista e encontre seus vídeos favoritos.</p><div class="searchbar"><div class="searchbox">⌕   O que você quer assistir?</div><div class="primary-button">⌕ Buscar</div></div><div class="cards"><div class="video-card"><div class="thumbnail react"><span class="thumb-mark">⚛</span><span class="play">▶</span><span class="heart filled">★</span></div><div class="card-details"><strong>Introdução ao React</strong><small>Exemplo de vídeo</small></div></div><div class="video-card"><div class="thumbnail ts"><span class="thumb-mark">TS</span><span class="play">▶</span><span class="heart">☆</span></div><div class="card-details"><strong>TypeScript na prática</strong><small>Exemplo de vídeo</small></div></div></div></div></div></div></div>
+<div><div class="screen-title"><strong>Vídeos favoritos</strong><small>/favorites</small></div><div class="desktop-canvas"><div class="app-shell"><div class="sidebar"><div class="logo-wrap"><div class="logo-icon">▶</div><div class="logo-copy"><strong>iCaseiHub</strong><small>Icasei Vídeos</small></div></div><div class="navitem">▤   Vídeos</div><div class="navitem active">♡   Favoritos (3)</div><div class="navitem logout">⇥   Sair</div></div><div class="main-content"><h2>Meus favoritos</h2><p class="subtitle">Seus vídeos salvos em um só lugar.</p><div class="count">3 vídeos favoritos</div><div class="cards"><div class="video-card"><div class="thumbnail react"><span class="thumb-mark">⚛</span><span class="play">▶</span><span class="heart filled">★</span></div><div class="card-details"><strong>Introdução ao React</strong><small>Exemplo de vídeo</small></div></div><div class="video-card"><div class="thumbnail vite"><span class="thumb-mark">⚡</span><span class="play">▶</span><span class="heart filled">★</span></div><div class="card-details"><strong>Vite e React</strong><small>Exemplo de vídeo</small></div></div></div></div></div></div></div>
+</section>
+<h2 class="board-section">02 / Telas mobile <span class="subsection-note">— navegação horizontal, um card por linha</span></h2>
+<section class="lower"><div class="mobile-grid">
+<div class="phone-wrap"><div class="phone-title">Login</div><div class="phone phone-login"><div class="login-card"><h2>Bem-vindo!</h2><p>Entre na sua conta para explorar e salvar seus vídeos favoritos.</p><div class="field"><label>E-mail</label><div class="fake-input">seu@email.com</div></div><div class="field"><label>Senha</label><div class="fake-input">Digite sua senha</div></div><div class="primary-button">Entrar</div><div class="secondary-action">Ainda não possui uma conta? <span>Cadastre-se</span></div></div></div></div>
+<div class="phone-wrap">
+<div class="phone-title">Cadastro</div>
+<div class="phone phone-login phone-register">
+<div class="login-card register-card">
+<div aria-hidden="true" class="register-icon">♙ +</div>
+<h2>Crie sua conta</h2>
+<p>Cadastre-se para pesquisar, assistir e salvar seus vídeos favoritos.</p>
+<div class="field"><label>E-mail</label><div class="fake-input">seu@email.com</div></div>
+<div class="field"><label>Senha</label><div class="fake-input">Crie uma senha</div></div>
+<p class="field-help">Utilize pelo menos 12 caracteres.</p>
+<div class="field"><label>Confirme sua senha</label><div class="fake-input">Digite sua senha novamente</div></div>
+<div class="primary-button">Criar conta</div>
+<div class="secondary-action">Já possui uma conta? <span>Entrar</span></div>
+</div>
+</div>
+</div>
+
+<div class="phone-wrap"><div class="phone-title">Vídeos</div><div class="phone"><div class="mobile-app"><div class="mobile-top"><div class="logo-wrap"><div class="logo-icon">▶</div><div class="logo-copy"><strong>iCaseiHub</strong><small>Icasei Vídeos</small></div></div><div class="navrow"><div class="navitem active">▤ Vídeos</div><div class="navitem">♡ Favoritos (3)</div><div class="navitem">⇥ Sair</div></div></div><div class="mobile-app-content"><h2>Explore vídeos</h2><p class="subtitle">Pesquise, assista e encontre seus vídeos favoritos.</p><div class="searchbar"><div class="searchbox">⌕ O que você quer assistir?</div><div class="primary-button">Buscar</div></div><div class="cards"><div class="video-card"><div class="thumbnail react"><span class="thumb-mark">⚛</span><span class="play">▶</span><span class="heart filled">★</span></div><div class="card-details"><strong>Introdução ao React</strong><small>Exemplo de vídeo</small></div></div></div></div></div></div></div>
+<div class="phone-wrap"><div class="phone-title">Favoritos</div><div class="phone"><div class="mobile-app"><div class="mobile-top"><div class="logo-wrap"><div class="logo-icon">▶</div><div class="logo-copy"><strong>iCaseiHub</strong><small>Icasei Vídeos</small></div></div><div class="navrow"><div class="navitem">▤ Vídeos</div><div class="navitem active">♡ Favoritos (3)</div><div class="navitem">⇥ Sair</div></div></div><div class="mobile-app-content"><h2>Meus favoritos</h2><p class="subtitle">Seus vídeos salvos em um só lugar.</p><div class="count">3 vídeos favoritos</div><div class="cards"><div class="video-card"><div class="thumbnail react"><span class="thumb-mark">⚛</span><span class="play">▶</span><span class="heart filled">★</span></div><div class="card-details"><strong>Introdução ao React</strong><small>Exemplo de vídeo</small></div></div><div class="video-card"><div class="thumbnail ts"><span class="thumb-mark">TS</span><span class="play">▶</span><span class="heart filled">★</span></div><div class="card-details"><strong>TypeScript na prática</strong><small>Exemplo de vídeo</small></div></div></div></div></div></div></div>
+</div>
+<div class="details"><h3>03 / Design tokens do código</h3><div class="colorlist">
+<div class="color-entry"><div class="colorbox" style="background:#0b1726"></div><label>Background</label><code>#0B1726</code></div>
+<div class="color-entry"><div class="colorbox" style="background:#122337"></div><label>Sidebar</label><code>#122337</code></div>
+<div class="color-entry"><div class="colorbox" style="background:#1b3045"></div><label>Surface</label><code>#1B3045</code></div>
+<div class="color-entry"><div class="colorbox" style="background:#24445c"></div><label>Hover</label><code>#24445C</code></div>
+<div class="color-entry"><div class="colorbox" style="background:#344d62"></div><label>Border</label><code>#344D62</code></div>
+<div class="color-entry"><div class="colorbox" style="background:#94caf3"></div><label>Brand</label><code>#94CAF3</code></div>
+<div class="color-entry"><div class="colorbox" style="background:#b9e0fa"></div><label>Brand hover</label><code>#B9E0FA</code></div>
+<div class="color-entry"><div class="colorbox" style="background:#f8fbff"></div><label>Texto</label><code>#F8FBFF</code></div>
+<div class="color-entry"><div class="colorbox" style="background:#a6bdce"></div><label>Texto 2</label><code>#A6BDCE</code></div>
+<div class="color-entry"><div class="colorbox" style="background:#8da8bc"></div><label>Muted</label><code>#8DA8BC</code></div>
+</div><div class="type"><h3>Tipografia &amp; componentes</h3><p><strong>Inter</strong> (fallback system-ui). Títulos 24–30 px, corpo 14–16 px e textos auxiliares 12–14 px. Border radius 8–16 px.</p><span class="tokens-chip">Input</span><span class="tokens-chip">SearchInput</span><span class="tokens-chip">Button</span><span class="tokens-chip">VideoCard</span><span class="tokens-chip">VideoList</span><span class="tokens-chip">EmptyState</span><span class="tokens-chip">VideoPlayer</span><p><strong>Estados:</strong> carregando, erro, resultados vazios, lista vazia, favoritos, vídeo selecionado.</p></div></div></section>
+<p class="footer">Referência visual estática baseada nos componentes e tokens conhecidos. A tela de cadastro foi acrescentada após a implementação. Miniaturas e vídeos são demonstrativos; valide os detalhes de cada tela no navegador. Não é captura pixel a pixel da aplicação.</p>
+</main>
+</body>
+</html>
