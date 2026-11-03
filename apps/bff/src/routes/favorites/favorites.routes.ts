@@ -1,34 +1,18 @@
 import type { DatabaseSync } from "node:sqlite";
 import { Router } from "express";
-
-import { getAuthenticatedUser } from "../auth/auth.service.js";
-
+import { requireAuth } from "../../middlewares/requireAuth.js";
 import { createFavoriteSchema, videoIdSchema } from "./favorites.schemas.js";
-
 import { addUserFavorite, listUserFavorites, removeUserFavorite } from "./favorites.service.js";
 
 export function createFavoritesRouter(database: DatabaseSync) {
   const router = Router();
 
-  router.use((request, response, next) => {
+  router.use((_request, response, next) => {
     response.setHeader("Cache-Control", "no-store");
-
-    const sessionToken = request.cookies?.icasei_session;
-
-    const user =
-      typeof sessionToken === "string" ? getAuthenticatedUser(database, sessionToken) : null;
-
-    if (!user) {
-      response.status(401).json({
-        error: "Usuário não autenticado.",
-      });
-      return;
-    }
-
-    response.locals.userId = user.id;
-
     next();
   });
+
+  router.use(requireAuth(database));
 
   router.get("/", (_request, response) => {
     const userId = response.locals.userId as string;
